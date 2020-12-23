@@ -1,14 +1,15 @@
 {
 	"folders": [
 		{
-			"path": "."
+			"path": "Shared_Files",
+			"name": "Shared_Files",
 		},
 		{
-			"name": "Code_ManTruck",
+			"name": "ManTruck",
 			"path": "Code_ManTruck"
 		},
 		{
-			"name": "Code_RemoteControl",
+			"name": "RemoteControl",
 			"path": "Code_RemoteControl"
 		}
 	],
