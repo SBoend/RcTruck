@@ -8,9 +8,10 @@ unsigned long timeout;
 
 bool IsRecieving();     
 
-bool WifiModule::Initialize(Gearbox mainGearbox, char radioId, char wifiPinCE, char wifiPinCSN, unsigned long timeOutConfig) {
-    gearbox = mainGearbox;
+bool WifiModule::Initialize(Transmission mainGearbox, SteeringWheel steering, char radioId, char wifiPinCE, char wifiPinCSN, unsigned long timeOutConfig) {
+    transmission = mainGearbox;
     timeout = timeOutConfig;
+    steeringWheel = steering;
     return Radio.init(radioId, wifiPinCE, wifiPinCSN);
 }
 
@@ -39,22 +40,23 @@ unsigned long WifiModule::ReadData() {
 void WifiModule::SwitchGears() {
     if (protokoll.GetShiftReverse()) {
         // TODO: CHANGE MOTOR DIRECTION
-        gearbox.SetGear(1);
+        transmission.SetGear(1);
     } else if (protokoll.GetShiftForward()) {
         // TODO: CHANGE MOTOR DIRECTION
-        gearbox.SetGear(1);
+        transmission.SetGear(1);
         return;
     } else if (protokoll.GetClutch()) {
-        gearbox.SetFreeRun();
+        transmission.SetFreeRun();
     } else if (protokoll.GetShiftUp()) {
-        gearbox.ShiftUp();
+        transmission.ShiftUp();
     } else if (protokoll.GetShiftDown()) {
-        gearbox.ShiftDown();
+        transmission.ShiftDown();
     } else {
-        gearbox.SetGear(protokoll.GetGear());
+        transmission.SetGear(protokoll.GetGear());
     } 
 }
 
 void WifiModule::EmergencyStop() {
-    gearbox.SetFreeRun();
+    transmission.SetFreeRun();
+    steeringWheel.SetCenter();
 }

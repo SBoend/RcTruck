@@ -1,5 +1,5 @@
-#include <Arduino.h>
 #include <MainFunktions.h>
+#include <Arduino.h>
 
 #define SERVO_STEER     15  // A1
 #define SERVO_GEAR      16  // A2
@@ -18,52 +18,45 @@
 #define RC_THROTTLE     26  // A7
 #define RC_AUX          14  // A0
 
-MainFunktions mainFunc;
 ReadSpektrumDX3E readRemote;
 CarMovement myMotor;
-Gearbox gearbox;
+Transmission transmission;
+SteeringWheel steeringWheel;
 WifiModule wifiModule;
+MainFunktions mainFunktions;
 
 bool wifiIsReady = false;
 int cnt = 0;
 
 void setup() {
   Serial.begin(9600);
-  mainFunc.myMotor.Initialize();
-  mainFunc.myMotor.FullStop();
-  mainFunc.gearbox.Initialize(SERVO_GEAR);
 
-  wifiIsReady = mainFunc.wifiModule.Initialize(gearbox);
+  transmission.Initialize(SERVO_GEAR);
+  steeringWheel.Initialize(SERVO_STEER);
+
+  wifiIsReady = wifiModule.Initialize(transmission, steeringWheel);
 
 #ifdef ENABLE_REMOTE
-  mainFunc.readRemote.Initialize(RC_STEERING, RC_THROTTLE, RC_AUX);
+  readRemote.Initialize(RC_STEERING, RC_THROTTLE, RC_AUX);
 #endif
 }
 
 //Repeat execution
 void loop() {
-  if (Serial.available())
-  {
-    mainFunc.ReadSerial();
+  if (Serial.available()) {
+    mainFunktions.HandleKeyPress(Serial.readString());  
   }
-
+  
   if (wifiIsReady)
-    mainFunc.wifiModule.TryRemoteLoop();
+    wifiModule.TryRemoteLoop();
 
 #ifdef ENABLE_REMOTE
   if (mainFunc.IsReady())
-    mainFunc.RemoteControl();
+    RemoteControl();
 #endif
 }
 
-void MainFunktions::ReadSerial()
-{
-  String inputString = Serial.readString();
-  handleKeyPress(inputString);           
-}
-
-void MainFunktions::handleKeyPress(String inputString)
-{
+void MainFunktions::HandleKeyPress(String inputString) {
     for (unsigned int cnt = 0U; cnt <= inputString.length(); cnt++) {
         char input = inputString.charAt(cnt);
         // STEERING
@@ -92,15 +85,15 @@ void MainFunktions::handleKeyPress(String inputString)
         }
         // GEARBOX
         else if (input == '1')
-            gearbox.SetGear(1);
+            transmission.SetGear(1);
         else if (input == '2')
-            gearbox.SetGear(2);
+            transmission.SetGear(2);
         else if (input == '3')
-            gearbox.SetGear(3);
+            transmission.SetGear(3);
         else if (input == '+')
-            gearbox.ShiftUp();
+            transmission.ShiftUp();
         else if (input == '-')
-            gearbox.ShiftDown();
+            transmission.ShiftDown();
     }
     
     if (inputString.toInt() > 0 && inputString.toInt() < 100) {  
@@ -119,7 +112,7 @@ void MainFunktions::RemoteControl() {
   }
 
   readRemote.Read();
-  gearbox.SetGear(readRemote.Gear);
+  transmission.SetGear(readRemote.Gear);
   if(readRemote.Turning != 0)
   {
       if (readRemote.Turning == 1)
