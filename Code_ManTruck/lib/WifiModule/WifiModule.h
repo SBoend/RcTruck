@@ -17,6 +17,7 @@ class WifiModule {
         void TryRemoteLoop();
     private:
         void SwitchGears();
+        void EmergencyStop();
         unsigned long ReadData();
 
         SebosRcSteering protokoll; 

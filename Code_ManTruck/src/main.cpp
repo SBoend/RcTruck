@@ -1,8 +1,5 @@
 #include <Arduino.h>
-#include <CarMovement.h>
 #include <MainFunktions.h>
-#include <ReadSpektrumDX3E.h>
-#include <Gearbox.h>
 
 #define SERVO_STEER     15  // A1
 #define SERVO_GEAR      16  // A2
@@ -58,8 +55,6 @@ void loop() {
     mainFunc.RemoteControl();
 #endif
 }
-
-
 
 void MainFunktions::ReadSerial()
 {

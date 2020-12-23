@@ -23,6 +23,7 @@ void WifiModule::TryRemoteLoop() {
             previousMillis = ReadData();        
 
     } while (currentMillis - previousMillis >= timeout);
+    EmergencyStop();
 }
 
 unsigned long WifiModule::ReadData() {
@@ -52,4 +53,8 @@ void WifiModule::SwitchGears() {
     } else {
         gearbox.SetGear(protokoll.GetGear());
     } 
+}
+
+void WifiModule::EmergencyStop() {
+    gearbox.SetFreeRun();
 }
