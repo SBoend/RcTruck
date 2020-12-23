@@ -1,12 +1,12 @@
-#ifndef Gearbox_h
-#define Gearbox_h
+#ifndef Transmission_h
+#define Transmission_h
 
 #include <Arduino.h>
 #include <Servo.h>
 
-class Gearbox {
+class Transmission {
   public:
-    void Initialize(char gearChannel);
+    void Initialize(char transmissionChannel);
     void SetGear(char gear);
     void SetFreeRun();
     void ShiftUp();
@@ -15,7 +15,7 @@ class Gearbox {
     void Status();
 #endif
   private:
-    Servo gearServo;
+    Servo transmissionServo;
     char gear;
 };
 
