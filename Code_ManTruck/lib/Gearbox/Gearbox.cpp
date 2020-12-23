@@ -1,10 +1,10 @@
 #include <Gearbox.h>
 
 #define GEAR_FIRST 180
-#define FREERUN_FIRST_SECOND 135
 #define GEAR_SECOND 90
-#define FREERUN_SECOND_THIRD 45
 #define GEAR_THIRD 0
+#define FREERUN_FIRST_SECOND 135
+#define FREERUN_SECOND_THIRD 45
 
 Servo gearServo;
 char currentGear;
@@ -43,7 +43,7 @@ void Gearbox::SetGear(char gear) {
 #endif
             currentGear = gear; gearServo.write(GEAR_THIRD); break;
         default:
-            currentGear = gear; SetFreeRun(); break;
+            currentGear = 0; SetFreeRun(); break;
     }
 }
 
@@ -71,6 +71,7 @@ void Gearbox::ShiftDown(){
         SetGear(1);
 }
 
+#ifdef DEBUG
 void Gearbox::Status() {
     Serial.print("Gearbox is Ready: ");
     Serial.print(gearServo.attached());
@@ -78,3 +79,4 @@ void Gearbox::Status() {
     Serial.print(currentGear);
     Serial.println(".");
 };
+#endif

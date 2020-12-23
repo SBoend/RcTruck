@@ -5,6 +5,7 @@
 #include <Arduino.h>
 #include <ReadSpektrumDX3E.h>
 #include <Gearbox.h>
+#include <WifiModule.h>
 
 class MainFunktions {
     public:
@@ -13,6 +14,7 @@ class MainFunktions {
         CarMovement myMotor;
         ReadSpektrumDX3E readRemote;
         Gearbox gearbox;
+        WifiModule wifiModule;
         bool ToggleRemote;
     private:
         void handleKeyPress(String inputString);

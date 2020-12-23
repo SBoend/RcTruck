@@ -11,10 +11,12 @@ class Gearbox {
     void SetFreeRun();
     void ShiftUp();
     void ShiftDown();
+#ifdef DEBUG
     void Status();
+#endif
   private:
     Servo gearServo;
-    int gear;
+    char gear;
 };
 
 #endif

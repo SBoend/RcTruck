@@ -25,7 +25,9 @@ MainFunktions mainFunc;
 ReadSpektrumDX3E readRemote;
 CarMovement myMotor;
 Gearbox gearbox;
+WifiModule wifiModule;
 
+bool wifiIsReady = false;
 int cnt = 0;
 
 void setup() {
@@ -33,6 +35,8 @@ void setup() {
   mainFunc.myMotor.Initialize();
   mainFunc.myMotor.FullStop();
   mainFunc.gearbox.Initialize(SERVO_GEAR);
+
+  wifiIsReady = mainFunc.wifiModule.Initialize(gearbox);
 
 #ifdef ENABLE_REMOTE
   mainFunc.readRemote.Initialize(RC_STEERING, RC_THROTTLE, RC_AUX);
@@ -45,6 +49,9 @@ void loop() {
   {
     mainFunc.ReadSerial();
   }
+
+  if (wifiIsReady)
+    mainFunc.wifiModule.TryRemoteLoop();
 
 #ifdef ENABLE_REMOTE
   if (mainFunc.IsReady())
