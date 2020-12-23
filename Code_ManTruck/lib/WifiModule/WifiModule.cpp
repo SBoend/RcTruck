@@ -34,6 +34,7 @@ unsigned long WifiModule::ReadData() {
         SwitchGears();
     }
 
+    steeringWheel.SetSteering(protokoll.RemoteData.Steering);
     return millis();
 }
 
