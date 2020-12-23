@@ -8,7 +8,7 @@ unsigned long timeout;
 
 bool IsRecieving();     
 
-bool WifiModule::Initialize(Gearbox mainGearbox, char radioId, char wifiPinCE, char wifiPinCSN, int timeOutConfig) {
+bool WifiModule::Initialize(Gearbox mainGearbox, char radioId, char wifiPinCE, char wifiPinCSN, unsigned long timeOutConfig) {
     gearbox = mainGearbox;
     timeout = timeOutConfig;
     return Radio.init(radioId, wifiPinCE, wifiPinCSN);

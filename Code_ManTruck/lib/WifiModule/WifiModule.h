@@ -13,7 +13,7 @@ const static uint8_t PIN_RADIO_CSN = 10;
 
 class WifiModule {
     public:
-        bool Initialize(Gearbox mainGearbox, char radioId = RADIO_ID, char wifiPinCE = PIN_RADIO_CE, char wifiPinCSN = PIN_RADIO_CSN , int timeOutConfig = 1000);
+        bool Initialize(Gearbox mainGearbox, char radioId = RADIO_ID, char wifiPinCE = PIN_RADIO_CE, char wifiPinCSN = PIN_RADIO_CSN, unsigned long timeOutConfig = 1000ul);
         void TryRemoteLoop();
     private:
         void SwitchGears();
