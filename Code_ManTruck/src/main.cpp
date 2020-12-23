@@ -1,5 +1,5 @@
-#include <MainFunktions.h>
 #include <Arduino.h>
+#include <MainFunktions.h>
 
 #define SERVO_STEER     15  // A1
 #define SERVO_GEAR      16  // A2
@@ -18,12 +18,11 @@
 #define RC_THROTTLE     26  // A7
 #define RC_AUX          14  // A0
 
-ReadSpektrumDX3E readRemote;
-CarMovement myMotor;
-Transmission transmission;
-SteeringWheel steeringWheel;
-WifiModule wifiModule;
 MainFunktions mainFunktions;
+ReadSpektrumDX3E readRemote;
+SteeringWheel steeringWheel;
+Transmission transmission;
+WifiModule wifiModule;
 
 bool wifiIsReady = false;
 int cnt = 0;

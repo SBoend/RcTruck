@@ -1,7 +1,6 @@
 #ifndef MainFunctions_h
 #define MainFunctions_h
 
-#include <CarMovement.h>
 #include <Arduino.h>
 #include <ReadSpektrumDX3E.h>
 #include <Transmission.h>
@@ -10,14 +9,13 @@
 
 class MainFunktions {
     public:
+        bool ToggleRemote;
         void RemoteControl();
         void HandleKeyPress(String inputString);
-        CarMovement myMotor;
         ReadSpektrumDX3E readRemote;
+        SteeringWheel steeringWheel;
         Transmission transmission;
         WifiModule wifiModule;
-        SteeringWheel steeringWheel;
-        bool ToggleRemote;
     private:
 };
 
