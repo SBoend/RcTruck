@@ -1,17 +1,14 @@
-#include <WifiModule.h>
-
-SebosRcSteering protokoll; 
-NRFLite Radio;
+#include "WifiModule.h"
 
 long LastPackageTime;   
 unsigned long timeout;
+NRFLite Radio;
 
 bool IsRecieving();     
 
-bool WifiModule::Initialize(Transmission mainGearbox, SteeringWheel steering, char radioId, char wifiPinCE, char wifiPinCSN, unsigned long timeOutConfig) {
-    transmission = mainGearbox;
+bool WifiModule::Initialize(
+        char radioId, char wifiPinCE, char wifiPinCSN, unsigned long timeOutConfig) {
     timeout = timeOutConfig;
-    steeringWheel = steering;
     return Radio.init(radioId, wifiPinCE, wifiPinCSN);
 }
 
@@ -28,36 +25,38 @@ void WifiModule::TryRemoteLoop() {
 }
 
 unsigned long WifiModule::ReadData() {
-    Radio.readData(&protokoll.RemoteData);
+    Radio.readData(&SebosRcSteering::RemoteData);
 
-    if (protokoll.HasGearData()) {
+    if (SebosRcSteering::HasGearData()) {
         SwitchGears();
     }
 
-    steeringWheel.SetSteering(protokoll.RemoteData.Steering);
+    Hardware::steeringWheel.SetSteering(SebosRcSteering::RemoteData.Steering);
+    Hardware::engine.SetSpeed(SebosRcSteering::RemoteData.Throttle);
     return millis();
 }
 
 void WifiModule::SwitchGears() {
-    if (protokoll.GetShiftReverse()) {
-        // TODO: CHANGE MOTOR DIRECTION
-        transmission.SetGear(1);
-    } else if (protokoll.GetShiftForward()) {
-        // TODO: CHANGE MOTOR DIRECTION
-        transmission.SetGear(1);
+    if (SebosRcSteering::GetShiftReverse()) {
+        Hardware::engine.SetDirection('R');
+        Hardware::transmission.SetGear(1);
+    } else if (SebosRcSteering::GetShiftForward()) {
+        Hardware::engine.SetDirection('F');
+        Hardware::transmission.SetGear(1);
         return;
-    } else if (protokoll.GetClutch()) {
-        transmission.SetFreeRun();
-    } else if (protokoll.GetShiftUp()) {
-        transmission.ShiftUp();
-    } else if (protokoll.GetShiftDown()) {
-        transmission.ShiftDown();
+    } else if (SebosRcSteering::GetClutch()) {
+        Hardware::transmission.SetFreeRun();
+    } else if (SebosRcSteering::GetShiftUp()) {
+        Hardware::transmission.ShiftUp();
+    } else if (SebosRcSteering::GetShiftDown()) {
+        Hardware::transmission.ShiftDown();
     } else {
-        transmission.SetGear(protokoll.GetGear());
+        Hardware::transmission.SetGear(SebosRcSteering::GetGear());
     } 
 }
 
 void WifiModule::EmergencyStop() {
-    transmission.SetFreeRun();
-    steeringWheel.SetCenter();
+    Hardware::engine.SetSpeed(0);
+    Hardware::transmission.SetFreeRun();
+    Hardware::steeringWheel.SetCenter();
 }

@@ -8,7 +8,7 @@
             "includePath": [
                 "f:/Codeding/RcTruck/Code_RemoteControl/include",
                 "f:/Codeding/RcTruck/Code_RemoteControl/src",
-                "f:/Codeding/RcTruck/Code_RemoteControl/.pio/libdeps/Nano/NRFLite/src",
+                "f:/Codeding/RcTruck/Code_RemoteControl/.pio/libdeps/Nano Remote Control/NRFLite/src",
                 "C:/Users/sboen/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
                 "C:/Users/sboen/.platformio/packages/framework-arduino-avr/cores/arduino",
                 "C:/Users/sboen/.platformio/packages/framework-arduino-avr/variants/eightanaloginputs",
@@ -24,7 +24,7 @@
                 "path": [
                     "f:/Codeding/RcTruck/Code_RemoteControl/include",
                     "f:/Codeding/RcTruck/Code_RemoteControl/src",
-                    "f:/Codeding/RcTruck/Code_RemoteControl/.pio/libdeps/Nano/NRFLite/src",
+                    "f:/Codeding/RcTruck/Code_RemoteControl/.pio/libdeps/Nano Remote Control/NRFLite/src",
                     "C:/Users/sboen/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
                     "C:/Users/sboen/.platformio/packages/framework-arduino-avr/cores/arduino",
                     "C:/Users/sboen/.platformio/packages/framework-arduino-avr/variants/eightanaloginputs",

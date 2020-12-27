@@ -1,4 +1,4 @@
-#include <ReadSpektrumDX3E.h>
+#include "ReadSpektrumDX3E.h"
 
 #define GEAR_MAX 1600
 #define GEAR_MIN 1300

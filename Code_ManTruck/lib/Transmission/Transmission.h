@@ -6,17 +6,17 @@
 
 class Transmission {
   public:
-    void Initialize(char transmissionChannel);
-    void SetGear(char gear);
-    void SetFreeRun();
-    void ShiftUp();
-    void ShiftDown();
+    static void Initialize(char transmissionChannel);
+    static void SetGear(char gear);
+    static void SetFreeRun();
+    static void ShiftUp();
+    static void ShiftDown();
 #ifdef DEBUG
-    void Status();
+    static void Status();
 #endif
   private:
-    Servo transmissionServo;
-    char gear;
+    static Servo transmissionServo;
+    static char currentGear;
 };
 
 #endif

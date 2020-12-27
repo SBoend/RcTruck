@@ -13,22 +13,22 @@ class SebosRcSteering {
     public:
         static DataPackage RemoteData;
     // Steering    
-        void SetSteering(char v);
-        void SetThrottle(char v);
+        static void SetSteering(char v);
+        static void SetThrottle(char v);
     // Gears
-        void SetGear(char gear);
-        void SetClutch();
-        void SetShiftUp();
-        void SetShiftDown();
-        void SetShiftReverse();
-        void SetShiftForward();
-        bool HasGearData();
-        bool GetShiftReverse();
-        bool GetShiftForward();
-        bool GetClutch();
-        bool GetShiftUp();
-        bool GetShiftDown();
-        char GetGear();
+        static void SetGear(char gear);
+        static void SetClutch();
+        static void SetShiftUp();
+        static void SetShiftDown();
+        static void SetShiftReverse();
+        static void SetShiftForward();
+        static bool HasGearData();
+        static bool GetShiftReverse();
+        static bool GetShiftForward();
+        static bool GetClutch();
+        static bool GetShiftUp();
+        static bool GetShiftDown();
+        static char GetGear();
     private: 
 };
 

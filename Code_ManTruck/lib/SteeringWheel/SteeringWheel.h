@@ -6,15 +6,15 @@
 
 class SteeringWheel {
   public:
-    void Initialize(char steeringChannel);
-    void SetSteering(byte angleToSet);
-    void SetCenter();
+    static void Initialize(char steeringChannel);
+    static void SetSteering(byte angleToSet);
+    static void SetCenter();
 #ifdef DEBUG
-    void Status();
+    static void Status();
 #endif
   private:
-    Servo steeringServo;
-    byte angle;
+    static Servo steeringServo;
+    static byte angle;
 };
 
 #endif

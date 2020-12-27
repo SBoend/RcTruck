@@ -1,4 +1,4 @@
-#include <Transmission.h>
+#include "Transmission.h"
 
 #define GEAR_FIRST 180
 #define GEAR_SECOND 90
@@ -6,15 +6,15 @@
 #define FREERUN_FIRST_SECOND 135
 #define FREERUN_SECOND_THIRD 45
 
-Servo transmissionServo;
-char currentGear;
+Servo Transmission::transmissionServo;
+char Transmission::currentGear;
 
 void Transmission::Initialize(char gearChannel) {
-    if (!transmissionServo.attached())
-        transmissionServo.attach(gearChannel);
+    if (!Transmission::transmissionServo.attached())
+        Transmission::transmissionServo.attach(gearChannel);
     
-    transmissionServo.write(FREERUN_FIRST_SECOND); 
-    currentGear = 1;   
+    Transmission::transmissionServo.write(FREERUN_FIRST_SECOND); 
+    Transmission::currentGear = 1;   
     
 #ifdef DEBUG
     Serial.println("Transmissions loaded!");
@@ -22,7 +22,7 @@ void Transmission::Initialize(char gearChannel) {
 }
 
 void Transmission::SetGear(char gear) {
-    if (currentGear == gear)
+    if (Transmission::currentGear == gear)
         return;
 
     switch (gear)
@@ -31,19 +31,19 @@ void Transmission::SetGear(char gear) {
 #ifdef DEBUG
     Serial.println("Transmissions: 1. Gear");
 #endif
-            currentGear = gear; transmissionServo.write(GEAR_FIRST); break;
+            Transmission::currentGear = gear; Transmission::transmissionServo.write(GEAR_FIRST); break;
         case 2:
 #ifdef DEBUG
     Serial.println("Transmissions: 2. Gear");
 #endif
-            currentGear = gear; transmissionServo.write(GEAR_SECOND); break;
+            Transmission::currentGear = gear; Transmission::transmissionServo.write(GEAR_SECOND); break;
         case 3:
 #ifdef DEBUG
     Serial.println("Transmissions: 3. Gear");
 #endif
-            currentGear = gear; transmissionServo.write(GEAR_THIRD); break;
+            Transmission::currentGear = gear; Transmission::transmissionServo.write(GEAR_THIRD); break;
         default:
-            currentGear = 0; SetFreeRun(); break;
+            Transmission::currentGear = 0; Transmission::SetFreeRun(); break;
     }
 }
 
@@ -52,31 +52,31 @@ void Transmission::SetFreeRun() {
     Serial.println("Transmissions: Freerun");
 #endif
     if (currentGear == 3)
-        transmissionServo.write(FREERUN_SECOND_THIRD);
+        Transmission::transmissionServo.write(FREERUN_SECOND_THIRD);
     else
-        transmissionServo.write(FREERUN_FIRST_SECOND);
+       Transmission::transmissionServo.write(FREERUN_FIRST_SECOND);
 }
 
 void Transmission::ShiftUp() {
-    if (currentGear == 1)
+    if (Transmission::currentGear == 1)
         SetGear(2);
-    else if (currentGear == 2)
+    else if (Transmission::currentGear == 2)
         SetGear(3);
 }
 
 void Transmission::ShiftDown(){    
-    if (currentGear == 3)
-        SetGear(2);
-    else if (currentGear == 2)
-        SetGear(1);
+    if (Transmission::currentGear == 3)
+        Transmission::SetGear(2);
+    else if (Transmission::currentGear == 2)
+        Transmission::SetGear(1);
 }
 
 #ifdef DEBUG
 void Transmission::Status() {
     Serial.print("Transmission is Ready: ");
-    Serial.print(transmissionServo.attached());
+    Serial.print(Transmission::transmissionServo.attached());
     Serial.print("\tCurrentGear: ");
-    Serial.print(currentGear);
+    Serial.print(Transmission::currentGear);
     Serial.println(".");
 };
 #endif
