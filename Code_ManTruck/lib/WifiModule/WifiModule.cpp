@@ -1,34 +1,32 @@
 #include "WifiModule.h"
 
-long LastPackageTime;   
-unsigned long timeout;
+long WifiModule::LastPackageTime;   
+long WifiModule::timeout;
+long WifiModule::prevoiusMillis;
 NRFLite Radio;
 
 bool IsRecieving();     
 
-bool WifiModule::Initialize(
-        char radioId, char wifiPinCE, char wifiPinCSN, unsigned long timeOutConfig) {
-    timeout = timeOutConfig;
+bool WifiModule::Initialize(char radioId, char wifiPinCE, char wifiPinCSN, unsigned long timeOutConfig) {
+    WifiModule::timeout = timeOutConfig;
+    WifiModule::prevoiusMillis = millis();
     return Radio.init(radioId, wifiPinCE, wifiPinCSN);
 }
 
-void WifiModule::TryRemoteLoop() {
-    unsigned long previousMillis = millis();
-    unsigned long currentMillis = millis();
-    do {
-        currentMillis = millis();
-        if (Radio.hasData())
-            previousMillis = ReadData();        
+void WifiModule::Read() {
+    long currentMillis = millis();
 
-    } while (currentMillis - previousMillis >= timeout);
-    EmergencyStop();
+    if (!Radio.hasData() && currentMillis - WifiModule::prevoiusMillis >= WifiModule::timeout)
+        WifiModule::EmergencyStop();
+    else 
+        WifiModule::prevoiusMillis = WifiModule::ReadData();   
 }
 
-unsigned long WifiModule::ReadData() {
+long WifiModule::ReadData() {
     Radio.readData(&SebosRcSteering::RemoteData);
 
     if (SebosRcSteering::HasGearData()) {
-        SwitchGears();
+        WifiModule::SwitchGears();
     }
 
     Hardware::steeringWheel.SetSteering(SebosRcSteering::RemoteData.Steering);

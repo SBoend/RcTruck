@@ -49,7 +49,7 @@ void loop() {
 #endif
   
   if (wifiIsReady)
-    wifi.TryRemoteLoop();
+    wifi.Read();
 
 #ifdef ENABLE_REMOTE
   if (mainFunc.IsReady())
