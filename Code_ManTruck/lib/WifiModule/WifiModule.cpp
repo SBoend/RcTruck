@@ -5,6 +5,7 @@ long WifiModule::timeout;
 long WifiModule::prevoiusMillis;
 NRFLite Radio;
 
+byte data_led_counter = 0;
 bool IsRecieving();     
 
 bool WifiModule::Initialize(char radioId, char wifiPinCE, char wifiPinCSN, unsigned long timeOutConfig) {
@@ -16,13 +17,20 @@ bool WifiModule::Initialize(char radioId, char wifiPinCE, char wifiPinCSN, unsig
 void WifiModule::Read() {
     long currentMillis = millis();
 
-    if (!Radio.hasData() && currentMillis - WifiModule::prevoiusMillis >= WifiModule::timeout)
+    if (!Radio.hasData() && currentMillis - WifiModule::prevoiusMillis >= WifiModule::timeout) 
         WifiModule::EmergencyStop();
     else 
         WifiModule::prevoiusMillis = WifiModule::ReadData();   
 }
 
 long WifiModule::ReadData() {
+    if (data_led_counter != 5)
+        data_led_counter++; 
+    else {
+        Hardware::controlCenter.StatusDataIncomming();
+        data_led_counter = 0;
+    }
+
     Radio.readData(&SebosRcSteering::RemoteData);
 
     if (SebosRcSteering::HasGearData()) {
@@ -57,4 +65,5 @@ void WifiModule::EmergencyStop() {
     Hardware::engine.SetSpeed(0);
     Hardware::transmission.SetFreeRun();
     Hardware::steeringWheel.SetCenter();
+    Hardware::controlCenter.StatusHold(true);
 }

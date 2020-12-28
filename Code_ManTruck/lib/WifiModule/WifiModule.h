@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <NRFLite.h>
+#include "Control_Center.h"
 #include "Hardware.h"
 #include "SebosRcSteering.h"
 #include "Engine.h"

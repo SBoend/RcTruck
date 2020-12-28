@@ -5,6 +5,7 @@
 #include <NRFLite.h>
 #include <SPI.h>
 #include <Wire.h>
+#include "Control_Center.h"
 #include "Engine.h"
 #include "SteeringWheel.h"
 #include "Transmission.h"
@@ -18,6 +19,7 @@ class Hardware {
 #ifdef ENABLE_REMOTE
         static ReadSpektrumDX3E readRemote;
 #endif
+        static Control_Center controlCenter;
         static Engine engine;
         static SteeringWheel steeringWheel;
         static Transmission transmission;
