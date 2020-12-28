@@ -1,9 +1,9 @@
-#ifndef SebosEngine_h
-#define SebosEngine_h
+#ifndef Engine_h
+#define Engine_h
 
 #include <Arduino.h>
 
-class SebosEngine {
+class Engine {
     public:
         /* RPWM & R_EN und LPWM & L_EN For FreeRunMode changed in program code) */
         static void Initialize(byte RPWM, byte LPWM, byte R_EN, byte L_EN);

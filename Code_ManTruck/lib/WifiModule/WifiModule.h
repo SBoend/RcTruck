@@ -5,7 +5,7 @@
 #include <NRFLite.h>
 #include "Hardware.h"
 #include "SebosRcSteering.h"
-#include "SebosEngine.h"
+#include "Engine.h"
 #include "SteeringWheel.h"
 #include "Transmission.h"
 

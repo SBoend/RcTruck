@@ -5,7 +5,7 @@
 #include <NRFLite.h>
 #include <SPI.h>
 #include <Wire.h>
-#include "SebosEngine.h"
+#include "Engine.h"
 #include "SteeringWheel.h"
 #include "Transmission.h"
 
@@ -18,7 +18,7 @@ class Hardware {
 #ifdef ENABLE_REMOTE
         static ReadSpektrumDX3E readRemote;
 #endif
-        static SebosEngine engine;
+        static Engine engine;
         static SteeringWheel steeringWheel;
         static Transmission transmission;
     private:
