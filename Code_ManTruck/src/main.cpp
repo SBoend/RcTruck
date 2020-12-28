@@ -1,9 +1,13 @@
 #include <Arduino.h>
+#include <Bounce2.h>
 #include "Hardware.h"
 #include "WifiModule.h"
 #include "SebosEngine.h"
 #include "SteeringWheel.h"
 #include "Transmission.h"
+
+#define SET_BIT(byte, bit) ((byte) |= (1UL << (bit)))
+#define CLEAR_BIT(byte,bit) ((byte) &= ~(1UL << (bit)))
 
 #define SERVO_STEER     15  // A1
 #define SERVO_GEAR      16  // A2
@@ -22,19 +26,58 @@
 #define RC_THROTTLE     26  // A7
 #define RC_AUX          14  // A0
 
+#define BLOCK_SCL       15  // A4
+#define BLOCK_SDA       16  // A5
+
+#define STATUS_DISPLAY  0x21
+#define STATUS_B0_L_G   0
+#define STATUS_B1_L_Y   1
+#define STATUS_B2_L_R   2
+#define STATUS_B3_R_1   3
+#define STATUS_B4_R_2   4
+
+
+Bounce bounce = Bounce();
+
+byte status_Value = 0xff;
+
 bool wifiIsReady = false;
 WifiModule wifi;
 int cnt = 0;
 
+void WriteStatus() {
+  Wire.beginTransmission(STATUS_DISPLAY);
+  Wire.write(status_Value);
+  Wire.endTransmission();
+}
+
 void setup() {
+  CLEAR_BIT(status_Value, STATUS_B0_L_G);
+  Wire.begin();  
+  WriteStatus();
+  
   Serial.begin(9600);
 
+  bounce.attach( BUTTON_RESET, INPUT_PULLUP );
+  bounce.interval(100); // interval in ms
+  
   Hardware::transmission.Initialize(SERVO_GEAR);
   Hardware::steeringWheel.Initialize(SERVO_STEER);
   Hardware::engine.Initialize(MOTOR_RPWM, MOTOR_LPWM, MOTOR_R_EN, MOTOR_L_EN);
 
   wifiIsReady = wifi.Initialize();
 
+  if (wifiIsReady) {
+    CLEAR_BIT(status_Value, STATUS_B1_L_Y);
+    SET_BIT(status_Value, STATUS_B3_R_1);
+    SET_BIT(status_Value, STATUS_B4_R_2);
+  } else {
+    SET_BIT(status_Value, STATUS_B1_L_Y);
+    CLEAR_BIT(status_Value, STATUS_B3_R_1);
+    CLEAR_BIT(status_Value, STATUS_B4_R_2);
+  }
+
+  WriteStatus();
 #ifdef ENABLE_REMOTE
   readRemote.Initialize(RC_STEERING, RC_THROTTLE, RC_AUX);
 #endif
@@ -47,9 +90,29 @@ void loop() {
     HandleKeyPress(Serial.readString());  
   }
 #endif
+
+  WriteStatus();
+  
+  if (wifiIsReady) {
+    CLEAR_BIT(status_Value, STATUS_B1_L_Y);
+    SET_BIT(status_Value, STATUS_B3_R_1);
+    SET_BIT(status_Value, STATUS_B4_R_2);
+  } else {
+    SET_BIT(status_Value, STATUS_B1_L_Y);
+    CLEAR_BIT(status_Value, STATUS_B3_R_1);
+    CLEAR_BIT(status_Value, STATUS_B4_R_2);
+  }
+ 
+  bounce.update();
+  if (bounce.changed() && bounce.read() == LOW)
+  {
+    wifi.EmergencyStop();
+    wifiIsReady = false;
+  } 
   
   if (wifiIsReady)
     wifi.Read();
+
 
 #ifdef ENABLE_REMOTE
   if (mainFunc.IsReady())

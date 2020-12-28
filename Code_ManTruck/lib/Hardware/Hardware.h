@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include <NRFLite.h>
 #include <SPI.h>
+#include <Wire.h>
 #include "SebosEngine.h"
 #include "SteeringWheel.h"
 #include "Transmission.h"
